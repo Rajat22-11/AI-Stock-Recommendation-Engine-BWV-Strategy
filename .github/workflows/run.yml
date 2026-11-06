@@ -27,7 +27,7 @@ jobs:
       TAPETIDE_TOKEN: ${{ secrets.TAPETIDE_TOKEN }}
       TAPETIDE_TOKEN_2: ${{ secrets.TAPETIDE_TOKEN_2 }}
       TAPETIDE_TOKEN_3: ${{ secrets.TAPETIDE_TOKEN_3 }}
-      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_POOLER_URL || secrets.SUPABASE_DB_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
