@@ -1,0 +1,444 @@
+{
+  "date": "2026-11-06",
+  "routes": {
+    "fundamentals": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "available_from": "str",
+            "available_from_estimated": "bool",
+            "basis": "str",
+            "eps_basis": "NoneType",
+            "metric": "str",
+            "period_end": "str",
+            "period_type": "str",
+            "unit": "str",
+            "value": "float"
+          }
+        ],
+        "links": {
+          "next": "NoneType"
+        },
+        "meta": {
+          "as_of": "str",
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "NoneType",
+          "route": "str"
+        }
+      }
+    },
+    "heatmap": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "change_pct": "float",
+            "change_pct_1m": "float",
+            "change_pct_1w": "float",
+            "change_pct_1y": "float",
+            "change_pct_3m": "float",
+            "change_pct_6m": "float",
+            "exchange": "str",
+            "isin": "str",
+            "ltp": "float",
+            "market_cap_cr": "float",
+            "name": "str",
+            "pe": "float",
+            "rank": "int",
+            "sector": "str",
+            "session_date": "str",
+            "symbol": "str",
+            "traded_value_cr": "float",
+            "volume": "int"
+          }
+        ],
+        "links": {
+          "next": "NoneType"
+        },
+        "meta": {
+          "as_of": "str",
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "NoneType",
+          "route": "str"
+        }
+      }
+    },
+    "holidays": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "date": "str",
+            "exchange": "str",
+            "name": "str",
+            "type": "str"
+          }
+        ],
+        "links": {
+          "next": "NoneType"
+        },
+        "meta": {
+          "as_of": "str",
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "NoneType",
+          "route": "str"
+        }
+      }
+    },
+    "index_levels": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "close": "float",
+            "date": "str",
+            "dividend_yield": "float",
+            "high": "float",
+            "low": "float",
+            "open": "float",
+            "pb": "float",
+            "pe": "float",
+            "turnover_cr": "float",
+            "volume": "int"
+          }
+        ],
+        "links": {
+          "next": "NoneType"
+        },
+        "meta": {
+          "as_of": "str",
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "NoneType",
+          "route": "str"
+        }
+      }
+    },
+    "market_status": {
+      "ok": true,
+      "shape": {
+        "data": {
+          "date": "str",
+          "holiday_name": "NoneType",
+          "is_trading_day": "bool",
+          "next_status": "str",
+          "next_transition_at": "str",
+          "server_time": "str",
+          "session": {
+            "close": "str",
+            "open": "str",
+            "pre_open": "str",
+            "type": "str"
+          },
+          "status": "str"
+        },
+        "meta": {
+          "as_of": "str",
+          "route": "str"
+        }
+      }
+    },
+    "pledge": {
+      "ok": true,
+      "shape": {
+        "data": [],
+        "links": {
+          "next": "NoneType"
+        },
+        "meta": {
+          "as_of": "str",
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "NoneType",
+          "route": "str"
+        }
+      }
+    },
+    "price": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "close": "float",
+            "date": "str",
+            "high": "float",
+            "low": "float",
+            "open": "int",
+            "raw_close": "float",
+            "volume": "int"
+          }
+        ],
+        "meta": {
+          "adjustment": {
+            "currency": "str",
+            "dividend_adjusted": "bool",
+            "raw_series_field": "str",
+            "series": "str",
+            "volume_adjusted": "bool"
+          },
+          "as_of": "str",
+          "count": "int",
+          "coverage": {
+            "first_stored_date": "str",
+            "last_stored_date": "str"
+          },
+          "days": "int",
+          "interval": "str",
+          "raw_close": {
+            "bars_total": "int",
+            "bars_with_raw_close": "int",
+            "counts_basis": "str",
+            "coverage_pct": "int",
+            "null_semantics": "str",
+            "reconstruction_alternative": "str"
+          },
+          "route": "str",
+          "symbol": "str",
+          "window": {
+            "counts_note": "str",
+            "end_date": "NoneType",
+            "first_date": "str",
+            "has_more": "bool",
+            "last_date": "str",
+            "max_days": "int",
+            "next_cursor": "NoneType",
+            "requested_days": "int",
+            "returned_rows": "int",
+            "served_days": "int",
+            "total_matching_rows": "int",
+            "truncated": "bool"
+          }
+        }
+      }
+    },
+    "screen_fields": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "category": "str",
+            "definition": "str",
+            "name": "str",
+            "unit": "str"
+          }
+        ],
+        "links": {
+          "next": "str"
+        },
+        "meta": {
+          "as_of": "str",
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "str",
+          "route": "str"
+        }
+      }
+    },
+    "screen_q1": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "dividend_yield_pct": "float",
+            "ltp": "float",
+            "market_cap_cr": "float",
+            "name": "str",
+            "net_profit_qtr_cr": "float",
+            "pe": "float",
+            "profit_growth_qtr_pct": "float",
+            "rank": "int",
+            "ratio_values": {
+              "Current price": "float",
+              "DMA 200": "NoneType",
+              "DMA 50": "NoneType",
+              "Debt to equity": "NoneType",
+              "Down from 52w high": "NoneType",
+              "Market Capitalization": "float",
+              "Pledged percentage": "NoneType",
+              "Return on capital employed": "float",
+              "Volume 1week average": "NoneType",
+              "Volume 1year average": "NoneType"
+            },
+            "roce_pct": "float",
+            "roe_pct": "NoneType",
+            "sales_growth_qtr_pct": "float",
+            "sales_qtr_cr": "float",
+            "sort_value": "float",
+            "symbol": "str"
+          }
+        ],
+        "links": {
+          "next": "NoneType"
+        },
+        "meta": {
+          "as_of": "str",
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "NoneType",
+          "route": "str",
+          "total_matches": "int"
+        }
+      }
+    },
+    "shareholding": {
+      "ok": true,
+      "shape": {
+        "data": {
+          "data": [
+            {
+              "data": "object",
+              "period_type": "str",
+              "periods": [
+                "str"
+              ],
+              "row_order": [
+                "str"
+              ],
+              "withheld": "object"
+            }
+          ],
+          "meta": {
+            "count": "int",
+            "latest_period": "str",
+            "stale": "bool",
+            "withheld_reasons": {
+              "implausible_value": "str",
+              "not_separated": "str",
+              "not_separated_in_filing": "str"
+            }
+          },
+          "promoter_pledge": {
+            "all_holders_pledged_pct_of_demat_shares": "NoneType",
+            "as_of": "str",
+            "as_of_date": "str",
+            "field_notes": {
+              "all_holders_pledged_pct_of_demat_shares": "str",
+              "pct_of_promoter_holding": "str",
+              "pct_of_total_shares": "str",
+              "promoter_pledged_pct_of_equity": "str",
+              "unpledged_promoter_pct": "str"
+            },
+            "label": "NoneType",
+            "pct_of_promoter_holding": "int",
+            "pct_of_total_shares": "NoneType",
+            "promoter_pledged_pct_of_equity": "NoneType",
+            "status": "str",
+            "unpledged_promoter_pct": "float"
+          }
+        },
+        "meta": {
+          "as_of": "str",
+          "route": "str",
+          "symbol": "str"
+        }
+      }
+    },
+    "signals": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "change_1w_pct": "float",
+            "high_52w": "float",
+            "low_52w": "float",
+            "ltp": "int",
+            "market_cap_cr": "float",
+            "name": "str",
+            "relative_volume": "float",
+            "rsi_14": "float",
+            "sector": "str",
+            "session_date": "str",
+            "signals": [
+              "str"
+            ],
+            "symbol": "str",
+            "volume": "int"
+          }
+        ],
+        "links": {
+          "next": "str"
+        },
+        "meta": {
+          "as_of": "str",
+          "bucket_totals": {
+            "near_52w_high": "int"
+          },
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "str",
+          "route": "str",
+          "session_date": "str",
+          "total_stocks": "int"
+        }
+      }
+    },
+    "surveillance": {
+      "ok": true,
+      "shape": {
+        "data": [
+          {
+            "as_of": "str",
+            "description": "str",
+            "first_seen": "str",
+            "framework": "str",
+            "measure": "str",
+            "name": "str",
+            "stage": "int",
+            "symbol": "str"
+          }
+        ],
+        "links": {
+          "next": "str"
+        },
+        "meta": {
+          "as_of": "str",
+          "count": "int",
+          "has_more": "bool",
+          "limit": "int",
+          "next_cursor": "str",
+          "route": "str"
+        }
+      }
+    },
+    "usage": {
+      "ok": true,
+      "shape": {
+        "data": {
+          "day": {
+            "limit": "int",
+            "period": "str",
+            "remaining": "int",
+            "resets_at": "str",
+            "used": "int"
+          },
+          "month": {
+            "limit": "NoneType",
+            "period": "str",
+            "remaining": "NoneType",
+            "resets_at": "str",
+            "used": "int"
+          },
+          "note": "str",
+          "plan": "str"
+        },
+        "meta": {
+          "as_of": "str",
+          "route": "str"
+        }
+      }
+    }
+  },
+  "symbol": "ACMESOLAR"
+}

@@ -1,0 +1,267 @@
+# breakout.config.yaml: SINGLE SOURCE OF TRUTH for every tunable number.
+# Code reads these values and hardcodes none. Edit here, open a PR; CI re-runs the
+# golden tests. Rule ids refer to reference-docs/breakout-runner-rules.md.
+# Tags: [skill] straight from the skill; [decision] a choice, challenge it;
+#       [silent] the skill gives no number; [unverified] not confirmed against the live API.
+version: 3
+config_date: 2026-11-06            # part of the skill_versions stamp; bump with each edit
+strategy: breakout
+
+tapetide:
+  base_url: https://api.tapetide.com
+  # Used strictly in this order; next token only when the active one is exhausted.
+  # `env` names an environment variable. Never put a token value in this file.
+  tokens:
+    - {label: primary, env: TAPETIDE_TOKEN}
+    - {label: secondary, env: TAPETIDE_TOKEN_2}
+    - {label: tertiary, env: TAPETIDE_TOKEN_3}
+  recommended_tokens: 3
+
+http:
+  retries: 3
+  backoff_seconds: [1, 3, 9]
+  timeout_seconds: 30
+  burst_per_minute: 60             # [unverified] the API publishes no number; 429 still honoured
+  max_rate_limit_waits: 5
+
+quota:
+  reserve_calls: 5
+  reserve_for_claude: 8            # same token serves MCP sessions
+  price_calls_max: 20              # O-06
+  midweek_budget_calls: 25
+  # Shed first to last when quota is short. Open-position bars are never sheddable.
+  shed_order: [financials, pledge, surveillance, alert_screen, deep_verify]
+
+ledger_mirror:                     # C-03: must equal Supabase `config`; runner aborts on a diff
+  paper_capital: 1000000
+  position_cap_pct: 10             # [skill]
+  risk_per_trade_pct: 1
+  stop_cap_pct: 8                  # [skill] stop = fill * (1 - 8/100)
+  trim_multiple: 1.25              # [skill] +25%
+  trim_fraction: 0.30              # [skill] 25-33%
+  reduced_size_multiple: 0.5       # [skill] also the half-size factor
+  max_open_positions: 10
+  cost_roundtrip_pct_liquid: 0.5   # strategy='shared' in the DB
+  cost_roundtrip_pct_thin: 1.5     # strategy='shared' in the DB
+
+data:
+  lookback_calendar_days: 840      # D4: one daily call; 104w correction + 13w SMA history
+  session_base: 5                  # I-03 volume x 5/sessions
+  corp_action_tolerance_pct: 0.5   # D-08
+  max_null_bars: 1                 # D-09
+  allow_raw_missing_trigger: false # D-08
+  calendar_cache_days: 30          # D-03
+  partial_week_label: PARTIAL
+  special_sessions: []             # weekend sessions (YYYY-MM-DD); the holiday route does not list them
+
+indicators:
+  sma_weeks: [13, 26, 39, 52]      # [skill] stacked test 13>26>39>52
+  slope_lookback_weeks: 4          # [skill]
+  pivot_lookback_weeks: 52         # [skill]
+  pivot_low_side_bars: 1           # [skill] 3-bar pivot low
+  volume_baseline: median          # [skill] median, not mean
+  volume_baseline_weeks: 20        # [skill]
+  atr_period: 14                   # [skill]
+  atr_weekly_to_daily_ratio: 2.27  # [skill] fallback only
+  correction_lookback_weeks: 104   # [decision] I-06
+  acceptable_correction_pct: 25    # [skill] latest drawdown this deep is the base; <25 = Setup B
+  base_window_weeks: 8             # [skill] calibration 9
+  base_bands: {tight_max: 12, normal_max: 20, loose_max: 30}   # [skill] calibration 9
+  ath_proximity_pct: 5             # [decision]
+  overext_peaks_to_measure: 3      # [skill]
+  overext_min_peaks: 2             # [decision]
+  overext_lookback_weeks: 104      # [decision]
+  peak_window_weeks: 3             # [decision]
+  min_peak_dist_pct: 10            # [decision]
+  thin_turnover_cr: 5              # [skill tracker protocol]
+  turnover_sessions: 20            # I-10
+  circuit_window_sessions: 20      # I-12
+  circuit_sessions_flag: 3         # [decision] I-12
+  circuit_pct_min: 4.9             # [decision]
+  min_pivot_weeks: 26              # [decision] I-16
+  structure_lookback_weeks: 26     # [decision] I-14
+  hh_hl_pivots: 2                  # [decision] I-14
+
+universe:
+  min_price: 30                    # backtest filter [skill]
+  min_median_turnover_cr: 1.0      # backtest filter [skill]
+  # InvITs and REITs: the screen has no series field. A run suggests additions from corporate actions.
+  exclude_symbols: [ANZEN, CAPINVIT, INDUSINVIT, IRBIT, KRT, NDRINVIT, NHIT, NXST, PGINVIT, RIIT, SHREMINVIT, TVSINVIT]
+
+screens:
+  common:                          # [skill] applied to both Q1 and Q2
+    - {ratio: Market Capitalization, op: ">", value: 1000}
+    - {ratio: Volume 1year average, op: ">", value: 100000}
+    - {ratio: Debt to equity, op: "<", value: 3}
+    - {ratio: Pledged percentage, op: "<", value: 10}
+  trigger_q1:
+    - {ratio: Down from 52w high, op: "<", value: 4}
+    - {ratio: Current price, op: ">", ref: DMA 50}
+    - {ratio: DMA 50, op: ">", ref: DMA 200}
+    - {ratio: Volume 1week average, op: ">", ref: Volume 1year average}
+  alert_q2:
+    - {ratio: Down from 52w high, op: ">", value: 1.5}
+    - {ratio: Down from 52w high, op: "<", value: 5}
+    - {ratio: Volume 1week average, op: "<", ref: Volume 1year average}
+    - {ratio: Current price, op: ">", ref: DMA 50}
+    - {ratio: DMA 50, op: ">", ref: DMA 200}
+  sort: Return on capital employed
+  order: desc
+  page_limit: 50                   # REST max
+  max_rows: 100
+  screen_drift_max_pct: 10         # U-04
+  local_ratios:                    # U-04: recomputed from bars because ratio_values is mostly null
+    Current price: {kind: last_close, sessions: 1}
+    DMA 50: {kind: sma_close, sessions: 50}
+    DMA 200: {kind: sma_close, sessions: 200}
+    Down from 52w high: {kind: below_high_pct, sessions: 250}
+    Volume 1week average: {kind: avg_volume, sessions: 5}
+    Volume 1year average: {kind: avg_volume, sessions: 250}
+  post_filters:                    # U-06 [skill]
+    max_close_to_sma13_trigger: 1.15
+    max_close_to_sma13_alert: 1.10
+    max_daily_atr_pct_trigger: null   # null: triggers go to the risk.atr bands (half size, NO_GO)
+    max_daily_atr_pct_alert: 4
+    discard_if_below_52w_high_pct: 10
+  max_deep_verify: 8               # [skill]
+
+fundamental_grade:                 # U-05 [skill]; size/tie-break only, never a gate
+  A: {roce_min: 20, profit_growth_min: 20, sales_growth_min: 15}
+  B: {roce_min: 12, growth_min: 0}
+  drop_if: {qtr_profit_lt: 0, profit_growth_lt: -30}
+
+setup:
+  textbook_correction_pct: 40      # [skill]
+  block_second_week_breakout: true # backtest excluded names already above the pivot last week
+  setup_b:
+    max_range_pct: 20              # [silent]
+    max_below_high_pct: 10         # [silent]
+  alert_max_below_pivot_pct: 5     # [skill] Q2 / WAIT_ALERT
+
+volume:
+  breakout_min_multiple: 2.0       # [skill] strict trigger
+  marginal_below: 1.5
+  sweet_spot: [2.0, 3.0]
+  strong: [3.0, 5.0]
+  edge_shrinks_above: 5.0          # conviction -1, never a filter
+  weakest_above: 10.0              # conviction -1 and a note
+  loose_base_volume_multiple: 3.0  # [decision] S1-04 conviction only, not a gate
+
+rs:                                # R-01..R-05
+  universe_index: nifty-500
+  page_limit: 500
+  window_weeks: {m3: 13, m6: 26, m12: 52}   # I-13
+  weights: {m3: 0.5, m6: 0.25, m12: 0.25}   # [decision] skill 0.4/0.2/0.2/0.2 minus the 9M leg
+  min_rs: 80                       # [skill]
+  ideal_rs: 90                     # [skill]
+
+risk:
+  entry_zone_max_above_close_pct: 5   # [skill]
+  atr_filter_daily_pct: {normal_max: 5, half_size_max: 7}   # [skill] >7 NO_GO
+
+conviction:                        # S1-13
+  high_min: 5
+  medium_min: 3
+  size_multiplier: {high: 1.0, medium: 1.0, low: 1.0}   # [silent] skill gives no numbers
+
+add:
+  flag:
+    min_weeks: 3                   # [silent]
+    max_weeks: 10                  # [silent]
+    max_range_pct: 20              # [silent] calibration 9
+    max_below_high_pct: 10         # [silent]
+    breakout_vs_flag_avg: 1.5      # [skill]
+    min_vol_multiple: 1.0          # [skill] at or above the 20-week median
+  sma_refill:
+    low_within_sma_pct: 2          # [skill]
+
+exit:
+  signal1_min_volume_multiple: 2.0     # [skill]
+  fallback_extension_pct: 30           # [decision] only when no own threshold
+  signal2_min_volume_multiple: 1.5     # [skill]
+  failure_lookback_weeks: 2            # [decision]
+  doji_body_to_range: 0.1              # [decision]
+  hammer_wick_to_body: 2.0             # [decision]
+  hammer_close_location_max: 0.5       # [skill] lower half
+  signal3_window_weeks: 6              # [skill]
+  signal3_min_wide_weeks: 3            # [skill]
+  signal3_wide_range_multiple: 1.5     # [skill]
+  signal3_range_avg_weeks: 10          # [decision]
+  chop_net_flat_pct: 3                 # [decision]
+  signal4_min_volume_multiple: 1.5     # [skill]
+  absorption_close_location_min: 0.667 # [skill] upper third
+  absorption_min_volume_multiple: 1.5  # [skill]
+
+kill_switch:                       # alerts only, a human or review decides the EXIT
+  pledge_jump_pp: 5                # [decision]
+  gap_below_pivot_min_volume_multiple: 2.0   # S4-07
+  alert_on_surveillance: true
+
+surveillance:
+  check: true
+  block_entry: false               # [skill] flag, do not block
+  frameworks: [asm, esm, gsm]
+  max_age_days: 7                  # the route returns empty past this age
+  page_limit: 1000                 # REST max; every framework fits in one unit
+
+corporate_actions:                 # one unit for the market-wide 30-day calendar
+  check: true
+  page_limit: 500
+  warn_types: [split, bonus]
+  non_equity_series: [IV, RR]
+
+fundamentals:                      # E-01..E-06
+  fetch_financials: true
+  quarters_to_fetch: 8
+  accel_quarters: 3
+  other_income_flag_pct: 30
+  low_base_pct: 20
+  fetch_pledge_for_screen_names: false
+
+holdings:                          # I-15 optional selection signal 6
+  fetch_shareholding: false
+  reclass_warn_pp: 5
+
+why_gate:                          # L-04
+  mode: auto_reduced               # review_required | auto_reduced | auto_full (test only)
+  grace_hours: 48
+  packet_max_chars: 6000
+
+midweek:
+  quote_batch_size: 50             # /v1/quotes/live maximum
+  near_trigger_pct: 3              # prompt: within 3% of the trigger
+  state_max_age_days: 10           # prompt: Friday state older than this is stale
+  new_high_signal: near_52w_high
+  new_high_min_market_cap_cr: 1000
+  new_high_limit: 50
+  distribution:
+    heavy_day_volume_multiple: 1.5 # [decision] vs the median daily volume
+    heavy_down_days_flag: 2        # [decision]
+    week_close_location_max: 0.33  # [decision] close near the week's low after a breakout
+    daily_baseline_sessions: 20    # [decision]
+
+reviews:
+  confidence: {low: 2, medium: 3, high: 4}   # [silent] signal_rationale.confidence (1-5)
+  outcome_min_weeks: 4             # prompt
+  missed_runner_gain_pct: 15       # prompt
+  avoided_loser_drawdown_pct: -10  # prompt
+
+schedule:                          # E-13 IST
+  timezone: Asia/Kolkata
+  run_after_close: "19:30"
+  cron_utc: "0 14 * * 1-5"         # keep .github/workflows in sync; CI checks it
+  midweek_days: [MON, TUE, WED, THU]
+  late_sweep: {enabled: true, cron_utc: "30 9 * * 6"}   # Saturday 15:00 IST stragglers
+  promotion_sweep: {enabled: true, cron_utc: "30 15 * * 0"}   # Sunday 21:00 IST: past the 48h grace, before Monday's open
+
+output:
+  price_decimals: 2
+  price_tolerance_pct: 0.05        # O-06 transcription check
+  run_max_minutes: 45
+  alert_recent_weeks: 4            # protocol: WAIT_ALERT names kept in price_bars
+
+shadow:
+  live_writes: false               # cutover switch and rollback switch
+  required_weeks: 4
+  compare_tolerance_pct: 1.0        # trigger, stop and volume multiple count as agreeing within this
+  compare_fields: [alert_trigger, stop, vol_mult]

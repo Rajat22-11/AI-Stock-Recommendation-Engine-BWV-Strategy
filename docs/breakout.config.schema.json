@@ -1,0 +1,1973 @@
+{
+  "$defs": {
+    "Add": {
+      "additionalProperties": false,
+      "properties": {
+        "flag": {
+          "$ref": "#/$defs/Flag"
+        },
+        "sma_refill": {
+          "$ref": "#/$defs/SmaRefill"
+        }
+      },
+      "required": [
+        "flag",
+        "sma_refill"
+      ],
+      "title": "Add",
+      "type": "object"
+    },
+    "AtrFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "half_size_max": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Half Size Max",
+          "type": "number"
+        },
+        "normal_max": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Normal Max",
+          "type": "number"
+        }
+      },
+      "required": [
+        "normal_max",
+        "half_size_max"
+      ],
+      "title": "AtrFilter",
+      "type": "object"
+    },
+    "BaseBands": {
+      "additionalProperties": false,
+      "properties": {
+        "loose_max": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Loose Max",
+          "type": "number"
+        },
+        "normal_max": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Normal Max",
+          "type": "number"
+        },
+        "tight_max": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Tight Max",
+          "type": "number"
+        }
+      },
+      "required": [
+        "tight_max",
+        "normal_max",
+        "loose_max"
+      ],
+      "title": "BaseBands",
+      "type": "object"
+    },
+    "Confidence": {
+      "additionalProperties": false,
+      "properties": {
+        "high": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "High",
+          "type": "integer"
+        },
+        "low": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Low",
+          "type": "integer"
+        },
+        "medium": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Medium",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Confidence",
+      "type": "object"
+    },
+    "Conviction": {
+      "additionalProperties": false,
+      "properties": {
+        "high_min": {
+          "minimum": 1,
+          "title": "High Min",
+          "type": "integer"
+        },
+        "medium_min": {
+          "minimum": 1,
+          "title": "Medium Min",
+          "type": "integer"
+        },
+        "size_multiplier": {
+          "$ref": "#/$defs/SizeMultiplier"
+        }
+      },
+      "required": [
+        "high_min",
+        "medium_min",
+        "size_multiplier"
+      ],
+      "title": "Conviction",
+      "type": "object"
+    },
+    "CorporateActions": {
+      "additionalProperties": false,
+      "properties": {
+        "check": {
+          "title": "Check",
+          "type": "boolean"
+        },
+        "non_equity_series": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Non Equity Series",
+          "type": "array"
+        },
+        "page_limit": {
+          "maximum": 500,
+          "minimum": 1,
+          "title": "Page Limit",
+          "type": "integer"
+        },
+        "warn_types": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warn Types",
+          "type": "array"
+        }
+      },
+      "required": [
+        "check",
+        "page_limit",
+        "warn_types",
+        "non_equity_series"
+      ],
+      "title": "CorporateActions",
+      "type": "object"
+    },
+    "Data": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_raw_missing_trigger": {
+          "title": "Allow Raw Missing Trigger",
+          "type": "boolean"
+        },
+        "calendar_cache_days": {
+          "minimum": 1,
+          "title": "Calendar Cache Days",
+          "type": "integer"
+        },
+        "corp_action_tolerance_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Corp Action Tolerance Pct",
+          "type": "number"
+        },
+        "lookback_calendar_days": {
+          "maximum": 2000,
+          "minimum": 1,
+          "title": "Lookback Calendar Days",
+          "type": "integer"
+        },
+        "max_null_bars": {
+          "minimum": 0,
+          "title": "Max Null Bars",
+          "type": "integer"
+        },
+        "partial_week_label": {
+          "title": "Partial Week Label",
+          "type": "string"
+        },
+        "session_base": {
+          "minimum": 1,
+          "title": "Session Base",
+          "type": "integer"
+        },
+        "special_sessions": {
+          "items": {
+            "format": "date",
+            "type": "string"
+          },
+          "title": "Special Sessions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "lookback_calendar_days",
+        "session_base",
+        "corp_action_tolerance_pct",
+        "max_null_bars",
+        "allow_raw_missing_trigger",
+        "calendar_cache_days",
+        "partial_week_label",
+        "special_sessions"
+      ],
+      "title": "Data",
+      "type": "object"
+    },
+    "Distribution": {
+      "additionalProperties": false,
+      "properties": {
+        "daily_baseline_sessions": {
+          "minimum": 1,
+          "title": "Daily Baseline Sessions",
+          "type": "integer"
+        },
+        "heavy_day_volume_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Heavy Day Volume Multiple",
+          "type": "number"
+        },
+        "heavy_down_days_flag": {
+          "minimum": 1,
+          "title": "Heavy Down Days Flag",
+          "type": "integer"
+        },
+        "week_close_location_max": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Week Close Location Max",
+          "type": "number"
+        }
+      },
+      "required": [
+        "heavy_day_volume_multiple",
+        "heavy_down_days_flag",
+        "week_close_location_max",
+        "daily_baseline_sessions"
+      ],
+      "title": "Distribution",
+      "type": "object"
+    },
+    "Exit": {
+      "additionalProperties": false,
+      "properties": {
+        "absorption_close_location_min": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Absorption Close Location Min",
+          "type": "number"
+        },
+        "absorption_min_volume_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Absorption Min Volume Multiple",
+          "type": "number"
+        },
+        "chop_net_flat_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Chop Net Flat Pct",
+          "type": "number"
+        },
+        "doji_body_to_range": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Doji Body To Range",
+          "type": "number"
+        },
+        "failure_lookback_weeks": {
+          "minimum": 1,
+          "title": "Failure Lookback Weeks",
+          "type": "integer"
+        },
+        "fallback_extension_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Fallback Extension Pct",
+          "type": "number"
+        },
+        "hammer_close_location_max": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Hammer Close Location Max",
+          "type": "number"
+        },
+        "hammer_wick_to_body": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Hammer Wick To Body",
+          "type": "number"
+        },
+        "signal1_min_volume_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Signal1 Min Volume Multiple",
+          "type": "number"
+        },
+        "signal2_min_volume_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Signal2 Min Volume Multiple",
+          "type": "number"
+        },
+        "signal3_min_wide_weeks": {
+          "minimum": 1,
+          "title": "Signal3 Min Wide Weeks",
+          "type": "integer"
+        },
+        "signal3_range_avg_weeks": {
+          "minimum": 1,
+          "title": "Signal3 Range Avg Weeks",
+          "type": "integer"
+        },
+        "signal3_wide_range_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Signal3 Wide Range Multiple",
+          "type": "number"
+        },
+        "signal3_window_weeks": {
+          "minimum": 1,
+          "title": "Signal3 Window Weeks",
+          "type": "integer"
+        },
+        "signal4_min_volume_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Signal4 Min Volume Multiple",
+          "type": "number"
+        }
+      },
+      "required": [
+        "signal1_min_volume_multiple",
+        "fallback_extension_pct",
+        "signal2_min_volume_multiple",
+        "failure_lookback_weeks",
+        "doji_body_to_range",
+        "hammer_wick_to_body",
+        "hammer_close_location_max",
+        "signal3_window_weeks",
+        "signal3_min_wide_weeks",
+        "signal3_wide_range_multiple",
+        "signal3_range_avg_weeks",
+        "chop_net_flat_pct",
+        "signal4_min_volume_multiple",
+        "absorption_close_location_min",
+        "absorption_min_volume_multiple"
+      ],
+      "title": "Exit",
+      "type": "object"
+    },
+    "Flag": {
+      "additionalProperties": false,
+      "properties": {
+        "breakout_vs_flag_avg": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Breakout Vs Flag Avg",
+          "type": "number"
+        },
+        "max_below_high_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Max Below High Pct",
+          "type": "number"
+        },
+        "max_range_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Max Range Pct",
+          "type": "number"
+        },
+        "max_weeks": {
+          "minimum": 1,
+          "title": "Max Weeks",
+          "type": "integer"
+        },
+        "min_vol_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Min Vol Multiple",
+          "type": "number"
+        },
+        "min_weeks": {
+          "minimum": 1,
+          "title": "Min Weeks",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "min_weeks",
+        "max_weeks",
+        "max_range_pct",
+        "max_below_high_pct",
+        "breakout_vs_flag_avg",
+        "min_vol_multiple"
+      ],
+      "title": "Flag",
+      "type": "object"
+    },
+    "FundamentalGrade": {
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "$ref": "#/$defs/GradeA"
+        },
+        "B": {
+          "$ref": "#/$defs/GradeB"
+        },
+        "drop_if": {
+          "$ref": "#/$defs/GradeDrop"
+        }
+      },
+      "required": [
+        "A",
+        "B",
+        "drop_if"
+      ],
+      "title": "FundamentalGrade",
+      "type": "object"
+    },
+    "Fundamentals": {
+      "additionalProperties": false,
+      "properties": {
+        "accel_quarters": {
+          "minimum": 1,
+          "title": "Accel Quarters",
+          "type": "integer"
+        },
+        "fetch_financials": {
+          "title": "Fetch Financials",
+          "type": "boolean"
+        },
+        "fetch_pledge_for_screen_names": {
+          "title": "Fetch Pledge For Screen Names",
+          "type": "boolean"
+        },
+        "low_base_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Low Base Pct",
+          "type": "number"
+        },
+        "other_income_flag_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Other Income Flag Pct",
+          "type": "number"
+        },
+        "quarters_to_fetch": {
+          "minimum": 1,
+          "title": "Quarters To Fetch",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "fetch_financials",
+        "quarters_to_fetch",
+        "accel_quarters",
+        "other_income_flag_pct",
+        "low_base_pct",
+        "fetch_pledge_for_screen_names"
+      ],
+      "title": "Fundamentals",
+      "type": "object"
+    },
+    "GradeA": {
+      "additionalProperties": false,
+      "properties": {
+        "profit_growth_min": {
+          "title": "Profit Growth Min",
+          "type": "number"
+        },
+        "roce_min": {
+          "title": "Roce Min",
+          "type": "number"
+        },
+        "sales_growth_min": {
+          "title": "Sales Growth Min",
+          "type": "number"
+        }
+      },
+      "required": [
+        "roce_min",
+        "profit_growth_min",
+        "sales_growth_min"
+      ],
+      "title": "GradeA",
+      "type": "object"
+    },
+    "GradeB": {
+      "additionalProperties": false,
+      "properties": {
+        "growth_min": {
+          "title": "Growth Min",
+          "type": "number"
+        },
+        "roce_min": {
+          "title": "Roce Min",
+          "type": "number"
+        }
+      },
+      "required": [
+        "roce_min",
+        "growth_min"
+      ],
+      "title": "GradeB",
+      "type": "object"
+    },
+    "GradeDrop": {
+      "additionalProperties": false,
+      "properties": {
+        "profit_growth_lt": {
+          "title": "Profit Growth Lt",
+          "type": "number"
+        },
+        "qtr_profit_lt": {
+          "title": "Qtr Profit Lt",
+          "type": "number"
+        }
+      },
+      "required": [
+        "qtr_profit_lt",
+        "profit_growth_lt"
+      ],
+      "title": "GradeDrop",
+      "type": "object"
+    },
+    "Holdings": {
+      "additionalProperties": false,
+      "properties": {
+        "fetch_shareholding": {
+          "title": "Fetch Shareholding",
+          "type": "boolean"
+        },
+        "reclass_warn_pp": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Reclass Warn Pp",
+          "type": "number"
+        }
+      },
+      "required": [
+        "fetch_shareholding",
+        "reclass_warn_pp"
+      ],
+      "title": "Holdings",
+      "type": "object"
+    },
+    "Http": {
+      "additionalProperties": false,
+      "properties": {
+        "backoff_seconds": {
+          "items": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "minItems": 1,
+          "title": "Backoff Seconds",
+          "type": "array"
+        },
+        "burst_per_minute": {
+          "minimum": 1,
+          "title": "Burst Per Minute",
+          "type": "integer"
+        },
+        "max_rate_limit_waits": {
+          "minimum": 1,
+          "title": "Max Rate Limit Waits",
+          "type": "integer"
+        },
+        "retries": {
+          "minimum": 0,
+          "title": "Retries",
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Timeout Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "retries",
+        "backoff_seconds",
+        "timeout_seconds",
+        "burst_per_minute",
+        "max_rate_limit_waits"
+      ],
+      "title": "Http",
+      "type": "object"
+    },
+    "Indicators": {
+      "additionalProperties": false,
+      "properties": {
+        "acceptable_correction_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Acceptable Correction Pct",
+          "type": "number"
+        },
+        "ath_proximity_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Ath Proximity Pct",
+          "type": "number"
+        },
+        "atr_period": {
+          "minimum": 1,
+          "title": "Atr Period",
+          "type": "integer"
+        },
+        "atr_weekly_to_daily_ratio": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Atr Weekly To Daily Ratio",
+          "type": "number"
+        },
+        "base_bands": {
+          "$ref": "#/$defs/BaseBands"
+        },
+        "base_window_weeks": {
+          "minimum": 1,
+          "title": "Base Window Weeks",
+          "type": "integer"
+        },
+        "circuit_pct_min": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Circuit Pct Min",
+          "type": "number"
+        },
+        "circuit_sessions_flag": {
+          "minimum": 1,
+          "title": "Circuit Sessions Flag",
+          "type": "integer"
+        },
+        "circuit_window_sessions": {
+          "minimum": 1,
+          "title": "Circuit Window Sessions",
+          "type": "integer"
+        },
+        "correction_lookback_weeks": {
+          "minimum": 1,
+          "title": "Correction Lookback Weeks",
+          "type": "integer"
+        },
+        "hh_hl_pivots": {
+          "minimum": 1,
+          "title": "Hh Hl Pivots",
+          "type": "integer"
+        },
+        "min_peak_dist_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Min Peak Dist Pct",
+          "type": "number"
+        },
+        "min_pivot_weeks": {
+          "minimum": 1,
+          "title": "Min Pivot Weeks",
+          "type": "integer"
+        },
+        "overext_lookback_weeks": {
+          "minimum": 1,
+          "title": "Overext Lookback Weeks",
+          "type": "integer"
+        },
+        "overext_min_peaks": {
+          "minimum": 1,
+          "title": "Overext Min Peaks",
+          "type": "integer"
+        },
+        "overext_peaks_to_measure": {
+          "minimum": 1,
+          "title": "Overext Peaks To Measure",
+          "type": "integer"
+        },
+        "peak_window_weeks": {
+          "minimum": 1,
+          "title": "Peak Window Weeks",
+          "type": "integer"
+        },
+        "pivot_lookback_weeks": {
+          "minimum": 1,
+          "title": "Pivot Lookback Weeks",
+          "type": "integer"
+        },
+        "pivot_low_side_bars": {
+          "minimum": 1,
+          "title": "Pivot Low Side Bars",
+          "type": "integer"
+        },
+        "slope_lookback_weeks": {
+          "minimum": 1,
+          "title": "Slope Lookback Weeks",
+          "type": "integer"
+        },
+        "sma_weeks": {
+          "items": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "minItems": 2,
+          "title": "Sma Weeks",
+          "type": "array"
+        },
+        "structure_lookback_weeks": {
+          "minimum": 1,
+          "title": "Structure Lookback Weeks",
+          "type": "integer"
+        },
+        "thin_turnover_cr": {
+          "minimum": 0,
+          "title": "Thin Turnover Cr",
+          "type": "number"
+        },
+        "turnover_sessions": {
+          "minimum": 1,
+          "title": "Turnover Sessions",
+          "type": "integer"
+        },
+        "volume_baseline": {
+          "const": "median",
+          "title": "Volume Baseline",
+          "type": "string"
+        },
+        "volume_baseline_weeks": {
+          "minimum": 1,
+          "title": "Volume Baseline Weeks",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sma_weeks",
+        "slope_lookback_weeks",
+        "pivot_lookback_weeks",
+        "pivot_low_side_bars",
+        "volume_baseline",
+        "volume_baseline_weeks",
+        "atr_period",
+        "atr_weekly_to_daily_ratio",
+        "correction_lookback_weeks",
+        "acceptable_correction_pct",
+        "base_window_weeks",
+        "base_bands",
+        "ath_proximity_pct",
+        "overext_peaks_to_measure",
+        "overext_min_peaks",
+        "overext_lookback_weeks",
+        "peak_window_weeks",
+        "min_peak_dist_pct",
+        "thin_turnover_cr",
+        "turnover_sessions",
+        "circuit_window_sessions",
+        "circuit_sessions_flag",
+        "circuit_pct_min",
+        "min_pivot_weeks",
+        "structure_lookback_weeks",
+        "hh_hl_pivots"
+      ],
+      "title": "Indicators",
+      "type": "object"
+    },
+    "KillSwitch": {
+      "additionalProperties": false,
+      "properties": {
+        "alert_on_surveillance": {
+          "title": "Alert On Surveillance",
+          "type": "boolean"
+        },
+        "gap_below_pivot_min_volume_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Gap Below Pivot Min Volume Multiple",
+          "type": "number"
+        },
+        "pledge_jump_pp": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Pledge Jump Pp",
+          "type": "number"
+        }
+      },
+      "required": [
+        "pledge_jump_pp",
+        "gap_below_pivot_min_volume_multiple",
+        "alert_on_surveillance"
+      ],
+      "title": "KillSwitch",
+      "type": "object"
+    },
+    "LateSweep": {
+      "additionalProperties": false,
+      "properties": {
+        "cron_utc": {
+          "title": "Cron Utc",
+          "type": "string"
+        },
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled",
+        "cron_utc"
+      ],
+      "title": "LateSweep",
+      "type": "object"
+    },
+    "LedgerMirror": {
+      "additionalProperties": false,
+      "properties": {
+        "cost_roundtrip_pct_liquid": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Cost Roundtrip Pct Liquid",
+          "type": "number"
+        },
+        "cost_roundtrip_pct_thin": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Cost Roundtrip Pct Thin",
+          "type": "number"
+        },
+        "max_open_positions": {
+          "minimum": 1,
+          "title": "Max Open Positions",
+          "type": "integer"
+        },
+        "paper_capital": {
+          "exclusiveMinimum": 0,
+          "title": "Paper Capital",
+          "type": "number"
+        },
+        "position_cap_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Position Cap Pct",
+          "type": "number"
+        },
+        "reduced_size_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Reduced Size Multiple",
+          "type": "number"
+        },
+        "risk_per_trade_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Risk Per Trade Pct",
+          "type": "number"
+        },
+        "stop_cap_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Stop Cap Pct",
+          "type": "number"
+        },
+        "trim_fraction": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Trim Fraction",
+          "type": "number"
+        },
+        "trim_multiple": {
+          "exclusiveMinimum": 1,
+          "title": "Trim Multiple",
+          "type": "number"
+        }
+      },
+      "required": [
+        "paper_capital",
+        "position_cap_pct",
+        "risk_per_trade_pct",
+        "stop_cap_pct",
+        "trim_multiple",
+        "trim_fraction",
+        "reduced_size_multiple",
+        "max_open_positions",
+        "cost_roundtrip_pct_liquid",
+        "cost_roundtrip_pct_thin"
+      ],
+      "title": "LedgerMirror",
+      "type": "object"
+    },
+    "LocalRatio": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "last_close",
+            "sma_close",
+            "below_high_pct",
+            "avg_volume"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "sessions": {
+          "minimum": 1,
+          "title": "Sessions",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "sessions"
+      ],
+      "title": "LocalRatio",
+      "type": "object"
+    },
+    "Midweek": {
+      "additionalProperties": false,
+      "properties": {
+        "distribution": {
+          "$ref": "#/$defs/Distribution"
+        },
+        "near_trigger_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Near Trigger Pct",
+          "type": "number"
+        },
+        "new_high_limit": {
+          "maximum": 500,
+          "minimum": 1,
+          "title": "New High Limit",
+          "type": "integer"
+        },
+        "new_high_min_market_cap_cr": {
+          "minimum": 0,
+          "title": "New High Min Market Cap Cr",
+          "type": "number"
+        },
+        "new_high_signal": {
+          "title": "New High Signal",
+          "type": "string"
+        },
+        "quote_batch_size": {
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Quote Batch Size",
+          "type": "integer"
+        },
+        "state_max_age_days": {
+          "minimum": 1,
+          "title": "State Max Age Days",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "quote_batch_size",
+        "near_trigger_pct",
+        "state_max_age_days",
+        "new_high_signal",
+        "new_high_min_market_cap_cr",
+        "new_high_limit",
+        "distribution"
+      ],
+      "title": "Midweek",
+      "type": "object"
+    },
+    "Output": {
+      "additionalProperties": false,
+      "properties": {
+        "alert_recent_weeks": {
+          "minimum": 1,
+          "title": "Alert Recent Weeks",
+          "type": "integer"
+        },
+        "price_decimals": {
+          "minimum": 0,
+          "title": "Price Decimals",
+          "type": "integer"
+        },
+        "price_tolerance_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Price Tolerance Pct",
+          "type": "number"
+        },
+        "run_max_minutes": {
+          "minimum": 1,
+          "title": "Run Max Minutes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "price_decimals",
+        "price_tolerance_pct",
+        "run_max_minutes",
+        "alert_recent_weeks"
+      ],
+      "title": "Output",
+      "type": "object"
+    },
+    "PostFilters": {
+      "additionalProperties": false,
+      "properties": {
+        "discard_if_below_52w_high_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Discard If Below 52W High Pct",
+          "type": "number"
+        },
+        "max_close_to_sma13_alert": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Max Close To Sma13 Alert",
+          "type": "number"
+        },
+        "max_close_to_sma13_trigger": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Max Close To Sma13 Trigger",
+          "type": "number"
+        },
+        "max_daily_atr_pct_alert": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Max Daily Atr Pct Alert",
+          "type": "number"
+        },
+        "max_daily_atr_pct_trigger": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Max Daily Atr Pct Trigger"
+        }
+      },
+      "required": [
+        "max_close_to_sma13_trigger",
+        "max_close_to_sma13_alert",
+        "max_daily_atr_pct_trigger",
+        "max_daily_atr_pct_alert",
+        "discard_if_below_52w_high_pct"
+      ],
+      "title": "PostFilters",
+      "type": "object"
+    },
+    "Predicate": {
+      "additionalProperties": false,
+      "properties": {
+        "op": {
+          "enum": [
+            ">",
+            "<",
+            ">=",
+            "<="
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "ratio": {
+          "title": "Ratio",
+          "type": "string"
+        },
+        "ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ref"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "ratio",
+        "op"
+      ],
+      "title": "Predicate",
+      "type": "object"
+    },
+    "PromotionSweep": {
+      "additionalProperties": false,
+      "properties": {
+        "cron_utc": {
+          "title": "Cron Utc",
+          "type": "string"
+        },
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled",
+        "cron_utc"
+      ],
+      "title": "PromotionSweep",
+      "type": "object"
+    },
+    "Quota": {
+      "additionalProperties": false,
+      "properties": {
+        "midweek_budget_calls": {
+          "minimum": 1,
+          "title": "Midweek Budget Calls",
+          "type": "integer"
+        },
+        "price_calls_max": {
+          "minimum": 0,
+          "title": "Price Calls Max",
+          "type": "integer"
+        },
+        "reserve_calls": {
+          "minimum": 0,
+          "title": "Reserve Calls",
+          "type": "integer"
+        },
+        "reserve_for_claude": {
+          "minimum": 0,
+          "title": "Reserve For Claude",
+          "type": "integer"
+        },
+        "shed_order": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Shed Order",
+          "type": "array"
+        }
+      },
+      "required": [
+        "reserve_calls",
+        "reserve_for_claude",
+        "price_calls_max",
+        "midweek_budget_calls",
+        "shed_order"
+      ],
+      "title": "Quota",
+      "type": "object"
+    },
+    "Reviews": {
+      "additionalProperties": false,
+      "properties": {
+        "avoided_loser_drawdown_pct": {
+          "maximum": 0,
+          "minimum": -100,
+          "title": "Avoided Loser Drawdown Pct",
+          "type": "number"
+        },
+        "confidence": {
+          "$ref": "#/$defs/Confidence"
+        },
+        "missed_runner_gain_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Missed Runner Gain Pct",
+          "type": "number"
+        },
+        "outcome_min_weeks": {
+          "minimum": 1,
+          "title": "Outcome Min Weeks",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "confidence",
+        "outcome_min_weeks",
+        "missed_runner_gain_pct",
+        "avoided_loser_drawdown_pct"
+      ],
+      "title": "Reviews",
+      "type": "object"
+    },
+    "Risk": {
+      "additionalProperties": false,
+      "properties": {
+        "atr_filter_daily_pct": {
+          "$ref": "#/$defs/AtrFilter"
+        },
+        "entry_zone_max_above_close_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Entry Zone Max Above Close Pct",
+          "type": "number"
+        }
+      },
+      "required": [
+        "entry_zone_max_above_close_pct",
+        "atr_filter_daily_pct"
+      ],
+      "title": "Risk",
+      "type": "object"
+    },
+    "Rs": {
+      "additionalProperties": false,
+      "properties": {
+        "ideal_rs": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Ideal Rs",
+          "type": "number"
+        },
+        "min_rs": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Min Rs",
+          "type": "number"
+        },
+        "page_limit": {
+          "maximum": 500,
+          "minimum": 1,
+          "title": "Page Limit",
+          "type": "integer"
+        },
+        "universe_index": {
+          "title": "Universe Index",
+          "type": "string"
+        },
+        "weights": {
+          "$ref": "#/$defs/RsWeights"
+        },
+        "window_weeks": {
+          "$ref": "#/$defs/RsWindows"
+        }
+      },
+      "required": [
+        "universe_index",
+        "page_limit",
+        "window_weeks",
+        "weights",
+        "min_rs",
+        "ideal_rs"
+      ],
+      "title": "Rs",
+      "type": "object"
+    },
+    "RsWeights": {
+      "additionalProperties": false,
+      "properties": {
+        "m12": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "M12",
+          "type": "number"
+        },
+        "m3": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "M3",
+          "type": "number"
+        },
+        "m6": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "M6",
+          "type": "number"
+        }
+      },
+      "required": [
+        "m3",
+        "m6",
+        "m12"
+      ],
+      "title": "RsWeights",
+      "type": "object"
+    },
+    "RsWindows": {
+      "additionalProperties": false,
+      "properties": {
+        "m12": {
+          "minimum": 1,
+          "title": "M12",
+          "type": "integer"
+        },
+        "m3": {
+          "minimum": 1,
+          "title": "M3",
+          "type": "integer"
+        },
+        "m6": {
+          "minimum": 1,
+          "title": "M6",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "m3",
+        "m6",
+        "m12"
+      ],
+      "title": "RsWindows",
+      "type": "object"
+    },
+    "Schedule": {
+      "additionalProperties": false,
+      "properties": {
+        "cron_utc": {
+          "title": "Cron Utc",
+          "type": "string"
+        },
+        "late_sweep": {
+          "$ref": "#/$defs/LateSweep"
+        },
+        "midweek_days": {
+          "items": {
+            "enum": [
+              "MON",
+              "TUE",
+              "WED",
+              "THU",
+              "FRI"
+            ],
+            "type": "string"
+          },
+          "title": "Midweek Days",
+          "type": "array"
+        },
+        "promotion_sweep": {
+          "$ref": "#/$defs/PromotionSweep"
+        },
+        "run_after_close": {
+          "title": "Run After Close",
+          "type": "string"
+        },
+        "timezone": {
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "promotion_sweep",
+        "timezone",
+        "run_after_close",
+        "cron_utc",
+        "midweek_days",
+        "late_sweep"
+      ],
+      "title": "Schedule",
+      "type": "object"
+    },
+    "Screens": {
+      "additionalProperties": false,
+      "properties": {
+        "alert_q2": {
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          },
+          "minItems": 1,
+          "title": "Alert Q2",
+          "type": "array"
+        },
+        "common": {
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          },
+          "title": "Common",
+          "type": "array"
+        },
+        "local_ratios": {
+          "additionalProperties": {
+            "$ref": "#/$defs/LocalRatio"
+          },
+          "title": "Local Ratios",
+          "type": "object"
+        },
+        "max_deep_verify": {
+          "minimum": 1,
+          "title": "Max Deep Verify",
+          "type": "integer"
+        },
+        "max_rows": {
+          "minimum": 1,
+          "title": "Max Rows",
+          "type": "integer"
+        },
+        "order": {
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "title": "Order",
+          "type": "string"
+        },
+        "page_limit": {
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Page Limit",
+          "type": "integer"
+        },
+        "post_filters": {
+          "$ref": "#/$defs/PostFilters"
+        },
+        "screen_drift_max_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Screen Drift Max Pct",
+          "type": "number"
+        },
+        "sort": {
+          "title": "Sort",
+          "type": "string"
+        },
+        "trigger_q1": {
+          "items": {
+            "$ref": "#/$defs/Predicate"
+          },
+          "minItems": 1,
+          "title": "Trigger Q1",
+          "type": "array"
+        }
+      },
+      "required": [
+        "common",
+        "trigger_q1",
+        "alert_q2",
+        "sort",
+        "order",
+        "page_limit",
+        "max_rows",
+        "screen_drift_max_pct",
+        "local_ratios",
+        "post_filters",
+        "max_deep_verify"
+      ],
+      "title": "Screens",
+      "type": "object"
+    },
+    "Setup": {
+      "additionalProperties": false,
+      "properties": {
+        "alert_max_below_pivot_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Alert Max Below Pivot Pct",
+          "type": "number"
+        },
+        "block_second_week_breakout": {
+          "title": "Block Second Week Breakout",
+          "type": "boolean"
+        },
+        "setup_b": {
+          "$ref": "#/$defs/SetupB"
+        },
+        "textbook_correction_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Textbook Correction Pct",
+          "type": "number"
+        }
+      },
+      "required": [
+        "textbook_correction_pct",
+        "block_second_week_breakout",
+        "setup_b",
+        "alert_max_below_pivot_pct"
+      ],
+      "title": "Setup",
+      "type": "object"
+    },
+    "SetupB": {
+      "additionalProperties": false,
+      "properties": {
+        "max_below_high_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Max Below High Pct",
+          "type": "number"
+        },
+        "max_range_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Max Range Pct",
+          "type": "number"
+        }
+      },
+      "required": [
+        "max_range_pct",
+        "max_below_high_pct"
+      ],
+      "title": "SetupB",
+      "type": "object"
+    },
+    "Shadow": {
+      "additionalProperties": false,
+      "properties": {
+        "compare_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Compare Fields",
+          "type": "array"
+        },
+        "compare_tolerance_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Compare Tolerance Pct",
+          "type": "number"
+        },
+        "live_writes": {
+          "title": "Live Writes",
+          "type": "boolean"
+        },
+        "required_weeks": {
+          "minimum": 1,
+          "title": "Required Weeks",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "live_writes",
+        "required_weeks",
+        "compare_tolerance_pct",
+        "compare_fields"
+      ],
+      "title": "Shadow",
+      "type": "object"
+    },
+    "SizeMultiplier": {
+      "additionalProperties": false,
+      "properties": {
+        "high": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "High",
+          "type": "number"
+        },
+        "low": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Low",
+          "type": "number"
+        },
+        "medium": {
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "title": "Medium",
+          "type": "number"
+        }
+      },
+      "required": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "SizeMultiplier",
+      "type": "object"
+    },
+    "SmaRefill": {
+      "additionalProperties": false,
+      "properties": {
+        "low_within_sma_pct": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Low Within Sma Pct",
+          "type": "number"
+        }
+      },
+      "required": [
+        "low_within_sma_pct"
+      ],
+      "title": "SmaRefill",
+      "type": "object"
+    },
+    "Surveillance": {
+      "additionalProperties": false,
+      "properties": {
+        "block_entry": {
+          "title": "Block Entry",
+          "type": "boolean"
+        },
+        "check": {
+          "title": "Check",
+          "type": "boolean"
+        },
+        "frameworks": {
+          "items": {
+            "enum": [
+              "asm",
+              "esm",
+              "gsm"
+            ],
+            "type": "string"
+          },
+          "title": "Frameworks",
+          "type": "array"
+        },
+        "max_age_days": {
+          "minimum": 1,
+          "title": "Max Age Days",
+          "type": "integer"
+        },
+        "page_limit": {
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Page Limit",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "check",
+        "block_entry",
+        "frameworks",
+        "max_age_days",
+        "page_limit"
+      ],
+      "title": "Surveillance",
+      "type": "object"
+    },
+    "Tapetide": {
+      "additionalProperties": false,
+      "properties": {
+        "base_url": {
+          "title": "Base Url",
+          "type": "string"
+        },
+        "recommended_tokens": {
+          "minimum": 1,
+          "title": "Recommended Tokens",
+          "type": "integer"
+        },
+        "tokens": {
+          "items": {
+            "$ref": "#/$defs/TokenSource"
+          },
+          "minItems": 1,
+          "title": "Tokens",
+          "type": "array"
+        }
+      },
+      "required": [
+        "base_url",
+        "tokens",
+        "recommended_tokens"
+      ],
+      "title": "Tapetide",
+      "type": "object"
+    },
+    "TokenSource": {
+      "additionalProperties": false,
+      "properties": {
+        "env": {
+          "title": "Env",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "env"
+      ],
+      "title": "TokenSource",
+      "type": "object"
+    },
+    "Universe": {
+      "additionalProperties": false,
+      "properties": {
+        "exclude_symbols": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclude Symbols",
+          "type": "array"
+        },
+        "min_median_turnover_cr": {
+          "minimum": 0,
+          "title": "Min Median Turnover Cr",
+          "type": "number"
+        },
+        "min_price": {
+          "minimum": 0,
+          "title": "Min Price",
+          "type": "number"
+        }
+      },
+      "required": [
+        "min_price",
+        "min_median_turnover_cr",
+        "exclude_symbols"
+      ],
+      "title": "Universe",
+      "type": "object"
+    },
+    "Volume": {
+      "additionalProperties": false,
+      "properties": {
+        "breakout_min_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Breakout Min Multiple",
+          "type": "number"
+        },
+        "edge_shrinks_above": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Edge Shrinks Above",
+          "type": "number"
+        },
+        "loose_base_volume_multiple": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Loose Base Volume Multiple",
+          "type": "number"
+        },
+        "marginal_below": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Marginal Below",
+          "type": "number"
+        },
+        "strong": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 100,
+              "type": "number"
+            },
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 100,
+              "type": "number"
+            }
+          ],
+          "title": "Strong",
+          "type": "array"
+        },
+        "sweet_spot": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 100,
+              "type": "number"
+            },
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 100,
+              "type": "number"
+            }
+          ],
+          "title": "Sweet Spot",
+          "type": "array"
+        },
+        "weakest_above": {
+          "exclusiveMinimum": 0,
+          "maximum": 100,
+          "title": "Weakest Above",
+          "type": "number"
+        }
+      },
+      "required": [
+        "breakout_min_multiple",
+        "marginal_below",
+        "sweet_spot",
+        "strong",
+        "edge_shrinks_above",
+        "weakest_above",
+        "loose_base_volume_multiple"
+      ],
+      "title": "Volume",
+      "type": "object"
+    },
+    "WhyGate": {
+      "additionalProperties": false,
+      "properties": {
+        "grace_hours": {
+          "minimum": 0,
+          "title": "Grace Hours",
+          "type": "integer"
+        },
+        "mode": {
+          "$ref": "#/$defs/WhyGateMode"
+        },
+        "packet_max_chars": {
+          "minimum": 1,
+          "title": "Packet Max Chars",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "mode",
+        "grace_hours",
+        "packet_max_chars"
+      ],
+      "title": "WhyGate",
+      "type": "object"
+    },
+    "WhyGateMode": {
+      "enum": [
+        "review_required",
+        "auto_reduced",
+        "auto_full"
+      ],
+      "title": "WhyGateMode",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "add": {
+      "$ref": "#/$defs/Add"
+    },
+    "config_date": {
+      "format": "date",
+      "title": "Config Date",
+      "type": "string"
+    },
+    "conviction": {
+      "$ref": "#/$defs/Conviction"
+    },
+    "corporate_actions": {
+      "$ref": "#/$defs/CorporateActions"
+    },
+    "data": {
+      "$ref": "#/$defs/Data"
+    },
+    "exit": {
+      "$ref": "#/$defs/Exit"
+    },
+    "fundamental_grade": {
+      "$ref": "#/$defs/FundamentalGrade"
+    },
+    "fundamentals": {
+      "$ref": "#/$defs/Fundamentals"
+    },
+    "holdings": {
+      "$ref": "#/$defs/Holdings"
+    },
+    "http": {
+      "$ref": "#/$defs/Http"
+    },
+    "indicators": {
+      "$ref": "#/$defs/Indicators"
+    },
+    "kill_switch": {
+      "$ref": "#/$defs/KillSwitch"
+    },
+    "ledger_mirror": {
+      "$ref": "#/$defs/LedgerMirror"
+    },
+    "midweek": {
+      "$ref": "#/$defs/Midweek"
+    },
+    "output": {
+      "$ref": "#/$defs/Output"
+    },
+    "quota": {
+      "$ref": "#/$defs/Quota"
+    },
+    "reviews": {
+      "$ref": "#/$defs/Reviews"
+    },
+    "risk": {
+      "$ref": "#/$defs/Risk"
+    },
+    "rs": {
+      "$ref": "#/$defs/Rs"
+    },
+    "schedule": {
+      "$ref": "#/$defs/Schedule"
+    },
+    "screens": {
+      "$ref": "#/$defs/Screens"
+    },
+    "setup": {
+      "$ref": "#/$defs/Setup"
+    },
+    "shadow": {
+      "$ref": "#/$defs/Shadow"
+    },
+    "strategy": {
+      "const": "breakout",
+      "title": "Strategy",
+      "type": "string"
+    },
+    "surveillance": {
+      "$ref": "#/$defs/Surveillance"
+    },
+    "tapetide": {
+      "$ref": "#/$defs/Tapetide"
+    },
+    "universe": {
+      "$ref": "#/$defs/Universe"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "volume": {
+      "$ref": "#/$defs/Volume"
+    },
+    "why_gate": {
+      "$ref": "#/$defs/WhyGate"
+    }
+  },
+  "required": [
+    "version",
+    "config_date",
+    "strategy",
+    "tapetide",
+    "http",
+    "quota",
+    "ledger_mirror",
+    "data",
+    "indicators",
+    "universe",
+    "screens",
+    "fundamental_grade",
+    "setup",
+    "volume",
+    "rs",
+    "risk",
+    "conviction",
+    "add",
+    "exit",
+    "kill_switch",
+    "surveillance",
+    "corporate_actions",
+    "fundamentals",
+    "holdings",
+    "why_gate",
+    "midweek",
+    "reviews",
+    "schedule",
+    "output",
+    "shadow"
+  ],
+  "title": "Config",
+  "type": "object"
+}

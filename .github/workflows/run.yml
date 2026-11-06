@@ -1,0 +1,66 @@
+name: run
+
+on:
+  schedule:
+    - cron: "0 14 * * 1-5"   # weekdays 19:30 IST; the calendar decides scan, check-in or skip
+    - cron: "30 9 * * 6"     # Saturday 15:00 IST: bars that were late on Friday
+    - cron: "30 15 * * 0"    # Sunday 21:00 IST: promote entries in time for Monday
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        default: auto
+        options: [auto, weekly_scan, midweek_checkin, sweep, promote]
+      dry_run:
+        type: boolean
+        default: true
+
+concurrency:
+  group: breakout-runner
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      TAPETIDE_TOKEN: ${{ secrets.TAPETIDE_TOKEN }}
+      TAPETIDE_TOKEN_2: ${{ secrets.TAPETIDE_TOKEN_2 }}
+      TAPETIDE_TOKEN_3: ${{ secrets.TAPETIDE_TOKEN_3 }}
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install .
+      - uses: actions/cache@v4
+        with:
+          path: .cache
+          key: calendar-${{ github.run_id }}
+          restore-keys: calendar-
+      - name: Select the mode
+        id: mode
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+          INPUT_MODE: ${{ inputs.mode }}
+        run: |
+          case "$SCHEDULE" in
+            "30 9 * * 6") mode=sweep ;;
+            "30 15 * * 0") mode=promote ;;
+            *) mode="${INPUT_MODE:-auto}" ;;
+          esac
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+      - name: Run
+        env:
+          DRY_RUN: ${{ inputs.dry_run && '--dry-run' || '' }}
+          MODE: ${{ steps.mode.outputs.mode }}
+        run: python -m breakout_runner.cli run --mode "$MODE" $DRY_RUN
+      - name: Upload the would-be rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rows
+          path: out/
+          if-no-files-found: ignore
+          retention-days: 90

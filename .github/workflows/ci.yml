@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      BREAKOUT_TEST_DB_URL: postgresql://postgres:test@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - name: Validate the config
+        run: python -m breakout_runner.cli check-config --no-tokens-required
+      - name: Config schema is current
+        run: python tools/export_schema.py --check
+      - name: No numeric literals in strategy code
+        run: python tools/check_literals.py
+      - name: Lint
+        run: ruff check . && ruff format --check .
+      - name: Tests
+        run: pytest -q
+      - name: Show what a config change does
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git show "origin/$BASE_REF:config/breakout.config.yaml" > /tmp/base.yaml || exit 0
+          python tools/config_effect.py /tmp/base.yaml config/breakout.config.yaml >> "$GITHUB_STEP_SUMMARY"

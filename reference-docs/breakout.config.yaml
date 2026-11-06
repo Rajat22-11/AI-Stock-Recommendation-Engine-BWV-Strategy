@@ -1,0 +1,212 @@
+# breakout.config.yaml (v2): SINGLE SOURCE OF TRUTH for every tunable number.
+# Code reads these values and hardcodes none (rule M-02). Edit here, open a PR, CI
+# re-runs the golden tests and shows what changed (rule C-04).
+# Tags: [skill] straight from the skill; [decision] my choice, challenge it;
+#       [silent] skill gives no number, default taken from calibration text.
+version: 2
+strategy: breakout
+
+ledger_mirror:                  # C-03: must equal Supabase `config` rows; runner aborts on a diff
+  paper_capital: 1000000
+  position_cap_pct: 10          # [skill]
+  risk_per_trade_pct: 1
+  stop_cap_pct: 8               # [skill] stop = fill * (1 - 8/100)
+  trim_multiple: 1.25           # [skill] +25%
+  trim_fraction: 0.30           # [skill] 25-33%
+  reduced_size_multiple: 0.5
+  max_open_positions: 10
+  cost_roundtrip_pct_liquid: 0.5
+  cost_roundtrip_pct_thin: 1.5
+
+data:
+  weekly_bars_to_fetch_weeks: 110     # D-02: 52w pivot + 20w baseline + 104w correction scan
+  daily_bars_to_fetch_days: 30        # D-06: ATR(14), data_through, turnover
+  session_base: 5                     # I-03 volume normalisation x5/sessions
+  corp_action_tolerance_pct: 0.5      # D-08
+  max_null_bars: 1                    # D-09
+  allow_raw_missing_trigger: false    # D-08
+  calendar_cache_days: 30             # D-03
+  partial_week_label: PARTIAL
+
+indicators:
+  sma_weeks: [13, 26, 39, 52]         # [skill] stacked test 13>26>39>52
+  slope_lookback_weeks: 4             # [skill]
+  pivot_lookback_weeks: 52            # [skill]
+  pivot_low_side_bars: 1              # [skill] 3-bar pivot low
+  volume_baseline: median             # [skill] median, not mean
+  volume_baseline_weeks: 20           # [skill]
+  atr_period: 14                      # [skill]
+  atr_weekly_to_daily_ratio: 2.27     # [skill] fallback only
+  correction_lookback_weeks: 104      # [decision] I-06
+  base_window_weeks: 8                # [skill] calibration §9
+  ath_proximity_pct: 5                # [decision]
+  overext_peaks_to_measure: 3         # [skill]
+  overext_min_peaks: 2                # [decision]
+  overext_lookback_weeks: 104         # [decision]
+  peak_window_weeks: 3                # [decision]
+  min_peak_dist_pct: 10               # [decision]
+  thin_turnover_cr: 5                 # [skill tracker protocol]
+  circuit_sessions_flag: 3            # [decision] I-12
+  circuit_pct_min: 4.9                # [decision]
+  min_pivot_weeks: 26                 # [decision] I-16
+  structure_lookback_weeks: 26        # [decision] I-14
+  hh_hl_pivots: 2                     # [decision] I-14
+
+universe:
+  min_price: 30                       # backtest filter [skill]
+  min_median_turnover_cr: 1.0         # backtest filter [skill]
+  min_market_cap_cr: 1000             # [skill] Q1/Q2
+  min_avg_volume_1y: 100000           # [skill] Q1/Q2
+  max_debt_to_equity: 3               # [skill]
+  max_pledged_pct: 10                 # [skill]
+  series: [EQ]
+  exclude_sme: true
+
+screens:
+  trigger_q1:
+    down_from_52w_high_lt: 4
+    price_gt_dma_50: true
+    dma_50_gt_dma_200: true
+    volume_1w_gt_volume_1y: true
+  alert_q2:
+    down_from_52w_high_gt: 1.5
+    down_from_52w_high_lt: 5
+    volume_1w_lt_volume_1y: true
+    price_gt_dma_50: true
+    dma_50_gt_dma_200: true
+  sort: Return on capital employed
+  order: desc
+  page_limit: 50                      # REST max
+  max_rows: 100
+  screen_drift_max_pct: 10            # U-04
+  post_filters:                       # U-06 [skill]
+    max_close_to_sma13_trigger: 1.15
+    max_close_to_sma13_alert: 1.10
+    volume_multiple_band_trigger: [2.0, 5.0]
+    max_daily_atr_pct_trigger: 5
+    max_daily_atr_pct_alert: 4
+    discard_if_below_52w_high_pct: 10
+  max_deep_verify: 8                  # [skill]
+  rank_volume_target: 2.5             # U-07 nearest the 2-3x sweet spot
+
+fundamental_grade:                    # U-05 [skill]; size/tie-break only, never a gate
+  A: {roce_min: 20, profit_growth_min: 20, sales_growth_min: 15}
+  B: {roce_min: 12, growth_min: 0}
+  drop_if: {qtr_profit_lt: 0, profit_growth_lt: -30}
+
+setup:
+  acceptable_correction_pct: 25       # [skill] <25 = continuation (Setup B)
+  textbook_correction_pct: 40         # [skill]
+  require_first_higher_low: true
+  setup_b:
+    max_range_pct: 20                 # [silent]
+    max_below_high_pct: 10            # [silent]
+  alert_max_below_pivot_pct: 5        # [skill] Q2 / WAIT_ALERT
+
+volume:
+  breakout_min_multiple: 2.0          # [skill]
+  marginal_below: 1.5
+  sweet_spot: [2.0, 3.0]
+  strong: [3.0, 5.0]
+  edge_shrinks_above: 5.0
+  weakest_above: 10.0
+  loose_base_volume_multiple: 3.0     # [decision] S1-04 conviction only, not a gate
+
+rs:                                   # R-01..R-05
+  universe_index: nifty-500
+  window_weeks: {m3: 13, m6: 26, m12: 52}   # I-13
+  weights: {m3: 0.5, m6: 0.25, m12: 0.25}   # [decision] skill 0.4/0.2/0.2/0.2 minus the 9M leg
+  min_rs: 80                          # [skill]
+  ideal_rs: 90                        # [skill]
+
+risk:
+  stop_pct_below_fill: 8              # [skill]
+  position_pct_of_capital: 10         # [skill]
+  half_size_factor: 0.5               # [skill]
+  entry_zone_max_above_close_pct: 5   # [skill]
+  atr_filter_daily_pct: {normal_max: 5, half_size_max: 7}   # [skill] >7 NO_GO
+  signal_valid_weeks: 1               # [skill]
+
+conviction:                           # S1-13
+  high_min: 5
+  medium_min: 3
+  size_multiplier: {high: 1.0, medium: 1.0, low: 1.0}   # [silent] skill gives no numbers
+
+trim:
+  gain_trigger_pct: 25                # [skill] executed by the ledger, runner only annotates
+  trim_fraction: [0.25, 0.33]         # [skill]
+
+add:
+  flag:
+    min_weeks: 3                      # [silent]
+    max_weeks: 10                     # [silent]
+    max_range_pct: 20                 # [silent] calibration §9
+    max_below_high_pct: 10            # [silent]
+    breakout_vs_flag_avg: 1.5         # [skill]
+  sma_refill:
+    low_within_sma_pct: 2             # [skill]
+    act_on_weekly_close_only: true    # [skill]
+
+exit:
+  signal1_min_volume_multiple: 2.0    # [skill]
+  fallback_extension_pct: 30          # [decision] only when no own threshold
+  signal2_min_volume_multiple: 1.5    # [skill]
+  failure_lookback_weeks: 2           # [decision]
+  doji_body_to_range: 0.1             # [decision]
+  signal3_wide_range_multiple: 1.5    # [skill]
+  signal3_min_wide_weeks_of_6: 3      # [skill]
+  chop_net_flat_pct: 3                # [decision]
+  signal4_min_volume_multiple: 1.5    # [skill]
+  absorption_close_location_min: 0.667   # [skill] upper third
+trail:
+  enabled: false                      # S4-06 [skill] no trailing stop
+kill_switch:
+  pledge_jump_pp: 5                   # [decision] alert only
+  alert_on_surveillance: true
+
+surveillance:
+  check: true
+  block_entry: false                  # [skill] flag, do not block
+
+fundamentals:                         # E-01..E-06
+  fetch_financials: true
+  quarters_to_fetch: 8
+  accel_quarters: 3
+  other_income_flag_pct: 30
+  low_base_pct: 20
+  fetch_pledge_for_screen_names: false
+
+holdings:                             # I-15 optional selection signal 6
+  fetch_shareholding: false
+  reclass_warn_pp: 5
+
+why_gate:                             # L-04 [decision]
+  mode: claude_review                 # claude_review | auto_reduced | auto_full
+  grace_hours: 48
+  packet_max_chars: 6000
+
+schedule:                             # E-13 IST
+  full_scan: {day: FRI, time: "19:30"}
+  midweek: {days: [MON, TUE, WED, THU], time: "19:30"}
+  skip_non_trading_days: true
+  window_end_rule: session_before_next_scan
+
+quota:                                # Q-01..Q-04
+  plan: free                          # free | starter | pro | pro_plus
+  daily_limit_by_plan: {free: 50, starter: 400, pro: 1200, pro_plus: 2500}
+  reserve_calls: 5
+  reserve_for_claude: 8
+  price_calls_max: 20                 # O-06
+  abort_on_exhausted: true
+
+http:
+  retries: 3
+  backoff_seconds: [1, 3, 9]
+  timeout_seconds: 30
+  burst_per_minute: 60
+
+output:
+  price_decimals: 2
+  price_tolerance_pct: 0.05           # O-06 transcription check
+  alert_channel: telegram
+  run_max_minutes: 45
